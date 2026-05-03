@@ -1,0 +1,27 @@
+PostgreSQL (OLTP)
+   ↓
+Debezium (CDC)
+   ↓
+Kafka (streaming)
+   ↓
+ClickHouse (OLAP)
+   ↓
+dbt (transform)
+
+
+I want to make an art commission platform that serve as community service
+
+The 'community service' fee is what artists pay, but it’s only used for platform maintenance and operational costs. Once the fees from transactions are sufficient to cover these costs, the artists’ fees will be reduced, or they might not have to pay at all for next transactions.
+
+The total target cost may be calculated using one of the following options:
+- Realtime: If the calculation can be accurate enough, based on live data.
+- Previous month cost: The target cost could be calculated as last month's cost * (100 + x)%, where 'x' represents a percentage adjustment."
+
+If the emergency budget has been collected, we can implement these activities to help the community:
+- Host an event
+- Commission work from new or smaller artists
+- Return the excess funds to the artists proportionally (we will track each artist's total contribution)
+
+So, the OLAP will handle the realtime calculation of artists's contribution for the current month, while OLTP will manage all other transactional operations
+
+remember the goals of this project simply to implement a real-time data pipeline and utilize the difference database type (OLTP and OLAP) to handle both transactional data and analytical queries.

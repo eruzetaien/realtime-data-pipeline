@@ -1,0 +1,8 @@
+YYYY-MM-DD
+2026-05-03
+A database is the top-level container for data and can contain multiple schemas.
+A schema is a logical namespace that organizes database objects like tables.
+Tables are where actual data is stored, and each table belongs to one schema within a database.
+Postgres default schema is public
+Podman is a daemonless container management tool, offering rootless operation for better security, while Docker relies on a centralized daemon that requires root access.
+ZooKeeper is a centralized service for managing configuration, synchronization, and group services in distributed applications, simplifying complex tasks and reducing bugs and race conditions.
