@@ -33,3 +33,15 @@ podman pull docker.io/apache/kafka:4.1.2
 podman run -p 9092:9092 apache/kafka:4.1.2
 ```
 
+
+```bash
+curl https://clickhouse.com/cli | sh
+echo 'export PATH="/home/<myuser>/.local/bin:$PATH"' >> ~/.bashrc
+source ~/.bashrc
+chctl
+clickhousectl local install lts
+clickhousectl local server start
+clickhousectl local server list
+clickhousectl local client
+clickhousectl local server stop default
+```
