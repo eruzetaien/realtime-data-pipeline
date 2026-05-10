@@ -1,0 +1,82 @@
+# RegisterConnector
+POST http://localhost:8083/connectors
+Content-Type: application/json
+Accept: application/json
+
+{
+  "name": "payment-connector",
+  "config": {
+    "connector.class": "io.debezium.connector.postgresql.PostgresConnector",
+    "database.hostname": "host.containers.internal",
+    "database.port": "5432", 
+    "database.user": "my_username", 
+    "database.password": "my_password", 
+    "database.dbname" : "art_commission", 
+    "topic.prefix": "payment",
+    "table.include.list": "public.payments",
+    "plugin.name": "pgoutput",
+    "publication.name": "payment_pub",
+    "publication.autocreate.mode": "disabled"
+  }
+}
+###
+
+# GetConnector
+GET http://localhost:8083/connectors
+Content-Type: application/json
+Accept: application/json
+###
+
+# GetConnectorConfig
+GET http://localhost:8083/connectors/payment-connector
+Content-Type: application/json
+Accept: application/json
+###
+
+# GetConnectorStatus
+GET http://localhost:8083/connectors/payment-sink-connector/status
+Content-Type: application/json
+Accept: application/json
+###
+
+# RestartConnector
+POST http://localhost:8083/connectors/payment-connector/restart
+Content-Type: application/json
+Accept: application/json
+###
+
+# RestartConnectorTask
+POST http://localhost:8083/connectors/payment-connector/tasks/0/restart
+Content-Type: application/json
+Accept: application/json
+###
+
+# DeleteConnectorConfig
+DELETE http://localhost:8083/connectors/payment-sink-connector
+Content-Type: application/json
+Accept: application/json
+###
+
+# RegisterSinkConnector
+POST http://localhost:8083/connectors
+Content-Type: application/json
+Accept: application/json
+
+{
+  "name": "payment-sink-connector",
+  "config": {
+    "connector.class": "com.clickhouse.kafka.connect.ClickHouseSinkConnector",
+    "topics": "payment.public.payments",
+    "topic2TableMap": "payment.public.payments=payments",
+    "hostname": "host.containers.internal",
+    "port": "8123",
+    "database": "default",
+    "username": "default",
+    "password": "",
+    "ssl": "false",
+    "tasks.max": "1",
+    "value.converter": "org.apache.kafka.connect.json.JsonConverter",
+    "value.converter.schemas.enable": "false"
+  }
+}
+###

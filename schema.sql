@@ -38,7 +38,21 @@ CREATE TABLE fees (
     fee_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP  -- When the fee was calculated or applied
 );
 
+CREATE PUBLICATION payment_pub FOR TABLE public.payments;
+
 -- Click House
+CREATE TABLE payments
+(
+    payment_id UInt64,
+    commission_id UInt64,
+    amount_paid Decimal(10,2),
+    payment_method String,
+    payment_date DateTime,
+    customer_id UInt64
+)
+ENGINE = MergeTree
+ORDER BY (payment_date, customer_id);
+
 CREATE TABLE artist_contributions (
     artist_id UInt64,                            -- Artist ID
     month Date,                                  -- Month for which contribution is calculated

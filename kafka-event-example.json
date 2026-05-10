@@ -1,0 +1,279 @@
+{
+  "schema": {
+    "type": "struct",
+    "fields": [
+      {
+        "type": "struct",
+        "fields": [
+          {
+            "type": "int32",
+            "optional": false,
+            "default": 0,
+            "field": "payment_id"
+          },
+          {
+            "type": "int32",
+            "optional": true,
+            "field": "commission_id"
+          },
+          {
+            "type": "bytes",
+            "optional": false,
+            "name": "org.apache.kafka.connect.data.Decimal",
+            "version": 1,
+            "parameters": {
+              "scale": "2",
+              "connect.decimal.precision": "10"
+            },
+            "field": "amount_paid"
+          },
+          {
+            "type": "string",
+            "optional": true,
+            "field": "payment_method"
+          },
+          {
+            "type": "int64",
+            "optional": true,
+            "name": "io.debezium.time.MicroTimestamp",
+            "version": 1,
+            "default": 0,
+            "field": "payment_date"
+          },
+          {
+            "type": "int32",
+            "optional": true,
+            "field": "customer_id"
+          }
+        ],
+        "optional": true,
+        "name": "payment.public.payments.Value",
+        "field": "before"
+      },
+      {
+        "type": "struct",
+        "fields": [
+          {
+            "type": "int32",
+            "optional": false,
+            "default": 0,
+            "field": "payment_id"
+          },
+          {
+            "type": "int32",
+            "optional": true,
+            "field": "commission_id"
+          },
+          {
+            "type": "bytes",
+            "optional": false,
+            "name": "org.apache.kafka.connect.data.Decimal",
+            "version": 1,
+            "parameters": {
+              "scale": "2",
+              "connect.decimal.precision": "10"
+            },
+            "field": "amount_paid"
+          },
+          {
+            "type": "string",
+            "optional": true,
+            "field": "payment_method"
+          },
+          {
+            "type": "int64",
+            "optional": true,
+            "name": "io.debezium.time.MicroTimestamp",
+            "version": 1,
+            "default": 0,
+            "field": "payment_date"
+          },
+          {
+            "type": "int32",
+            "optional": true,
+            "field": "customer_id"
+          }
+        ],
+        "optional": true,
+        "name": "payment.public.payments.Value",
+        "field": "after"
+      },
+      {
+        "type": "struct",
+        "fields": [
+          {
+            "type": "string",
+            "optional": false,
+            "field": "version"
+          },
+          {
+            "type": "string",
+            "optional": false,
+            "field": "connector"
+          },
+          {
+            "type": "string",
+            "optional": false,
+            "field": "name"
+          },
+          {
+            "type": "int64",
+            "optional": false,
+            "field": "ts_ms"
+          },
+          {
+            "type": "string",
+            "optional": true,
+            "name": "io.debezium.data.Enum",
+            "version": 1,
+            "parameters": {
+              "allowed": "true,first,first_in_data_collection,last_in_data_collection,last,false,incremental"
+            },
+            "default": "false",
+            "field": "snapshot"
+          },
+          {
+            "type": "string",
+            "optional": false,
+            "field": "db"
+          },
+          {
+            "type": "string",
+            "optional": true,
+            "field": "sequence"
+          },
+          {
+            "type": "int64",
+            "optional": true,
+            "field": "ts_us"
+          },
+          {
+            "type": "int64",
+            "optional": true,
+            "field": "ts_ns"
+          },
+          {
+            "type": "string",
+            "optional": false,
+            "field": "schema"
+          },
+          {
+            "type": "string",
+            "optional": false,
+            "field": "table"
+          },
+          {
+            "type": "int64",
+            "optional": true,
+            "field": "txId"
+          },
+          {
+            "type": "int64",
+            "optional": true,
+            "field": "lsn"
+          },
+          {
+            "type": "int64",
+            "optional": true,
+            "field": "xmin"
+          },
+          {
+            "type": "string",
+            "optional": true,
+            "field": "origin"
+          },
+          {
+            "type": "int64",
+            "optional": true,
+            "field": "origin_lsn"
+          }
+        ],
+        "optional": false,
+        "name": "io.debezium.connector.postgresql.Source",
+        "version": 1,
+        "field": "source"
+      },
+      {
+        "type": "struct",
+        "fields": [
+          {
+            "type": "string",
+            "optional": false,
+            "field": "id"
+          },
+          {
+            "type": "int64",
+            "optional": false,
+            "field": "total_order"
+          },
+          {
+            "type": "int64",
+            "optional": false,
+            "field": "data_collection_order"
+          }
+        ],
+        "optional": true,
+        "name": "event.block",
+        "version": 1,
+        "field": "transaction"
+      },
+      {
+        "type": "string",
+        "optional": false,
+        "field": "op"
+      },
+      {
+        "type": "int64",
+        "optional": true,
+        "field": "ts_ms"
+      },
+      {
+        "type": "int64",
+        "optional": true,
+        "field": "ts_us"
+      },
+      {
+        "type": "int64",
+        "optional": true,
+        "field": "ts_ns"
+      }
+    ],
+    "optional": false,
+    "name": "payment.public.payments.Envelope",
+    "version": 2
+  },
+  "payload": {
+    "before": null,
+    "after": {
+      "payment_id": 1,
+      "commission_id": 1,
+      "amount_paid": "Opg=",
+      "payment_method": "PayPal",
+      "payment_date": 1778407454538796,
+      "customer_id": 101
+    },
+    "source": {
+      "version": "3.5.0.Final",
+      "connector": "postgresql",
+      "name": "payment",
+      "ts_ms": 1778382254539,
+      "snapshot": "false",
+      "db": "art_commission",
+      "sequence": "[null,\"29772000\"]",
+      "ts_us": 1778382254539497,
+      "ts_ns": 1778382254539497000,
+      "schema": "public",
+      "table": "payments",
+      "txId": 780,
+      "lsn": 29772000,
+      "xmin": null,
+      "origin": null,
+      "origin_lsn": null
+    },
+    "transaction": null,
+    "op": "c",
+    "ts_ms": 1778382254627,
+    "ts_us": 1778382254627377,
+    "ts_ns": 1778382254627377200
+  }
+}
