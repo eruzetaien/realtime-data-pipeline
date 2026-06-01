@@ -16,7 +16,18 @@ Accept: application/json
     "table.include.list": "public.payments",
     "plugin.name": "pgoutput",
     "publication.name": "payment_pub",
-    "publication.autocreate.mode": "disabled"
+    "publication.autocreate.mode": "disabled",
+    "tombstones.on.delete": "false",
+    "transforms": "unwrap",
+    "transforms.unwrap.type": "io.debezium.transforms.ExtractNewRecordState",
+    "transforms.unwrap.drop.tombstones": "true",
+    "transforms.unwrap.delete.handling.mode": "rewrite",
+    "key.converter": "org.apache.kafka.connect.json.JsonConverter",
+    "key.converter.schemas.enable": "false",
+    "value.converter": "org.apache.kafka.connect.json.JsonConverter",
+    "value.converter.schemas.enable": "false",
+    "decimal.handling.mode": "double",
+    "time.precision.mode": "connect"
   }
 }
 ###

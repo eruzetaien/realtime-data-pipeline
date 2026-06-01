@@ -13,20 +13,22 @@ Topic: event storage, multi producer & consumer, has config about event TTL, par
 Event: not deleted after consumption (contrast with message),
 Kafka performance is O(1) with respect to data size, same key goes to same topic partition
 Kafka reads event in order
-----2026-06-05
+----2026-05-06
 Debezium is built on top of Apache Kafka
 Kafka connect is a way to integration Kafka with database
-----2026-08-05
+----2026-05-08
 A pod in podman is a group of containers that share some resources and behave like a small application unit (like pod in Kubernetes).
-----2026-09-05
+----2026-05-09
 Sequential disk access can be faster than random memory access, HDD sequential  access is faster than SSD random access. Kafka utilize this characteristic by using log structured file, only appending new data will result in sequential disk writes. To make it more efficient, Kafka encourage large I/O operation
 By utilizing file system for storing data, Kafka lets the OS to manage the cache, so they don't depend on application memory cache cause it will make unnecessary cache duplication, in app memory and kernel page cache
 Kafka append() --> file system/ page cache (RAM) --> physical disk
 Byte copying between the producer, broker, and consumer is also inefficient, so Kafka use standardized binary format, so the data can be transferred without the need of modification between them
-----2026-10-05
+----2026-05-10
 A PostgreSQL publication is a named configuration that defines which tables’ changes are exposed for logical replication (e.g., for Debezium to stream into Kafka). 
 In database, a normal view stores only the query and computes results on demand, while a materialized view stores the query’s computed results physically for faster reads.
 An SSTable is the immutable, sorted on-disk storage file format that an LSM-Tree organizes and merges to enable high-performance database writes and reads, maximize sequential I/O
 MergeTree engine in ClickHouse is a LSM-tree, it use primary key to determine sort order, column that used in ORDER BY clause automatically become the primary key. Primary key doesn't have to be unique, it's only used for indexing an sorting
 Data parts in ClickHouse are immutable, self-contained (have metadata) and can ben stored in wide format, where each column is stored in a seperate file in compact format, where each all columns are stored in one file.
- 
+----2026-06-01
+Materialized view update can be full refresh or incremental refresh. Incremental MV in Clickhouse use incremental refresh, while Refreshable MV and Postgres use full refresh.
+Single Message Transformation (SMT) in Debezium is used to do transformation like filter, unwrap, or reroute before sending the changes to Kafka?

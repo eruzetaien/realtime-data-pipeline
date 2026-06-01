@@ -69,35 +69,27 @@ kafka-console-consumer --topic transaction-events --from-beginning --bootstrap-s
 ```
 
 ```bash
-podman run -it --rm -p 9092:9092 \
+podman run -it --rm -p 9092:9092 -p 29092:29092 \
   --name kafka --hostname kafka \
   -e KAFKA_NODE_ID=1 \
   -e KAFKA_PROCESS_ROLES=broker,controller \
   -e KAFKA_CONTROLLER_QUORUM_VOTERS=1@localhost:9093 \
-  -e KAFKA_LISTENERS=PLAINTEXT://0.0.0.0:9092,CONTROLLER://0.0.0.0:9093 \
-  -e KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://host.containers.internal:9092 \
+  -e KAFKA_LISTENERS=INTERNAL://0.0.0.0:29092,EXTERNAL://0.0.0.0:9092,CONTROLLER://0.0.0.0:9093 \
+  -e KAFKA_ADVERTISED_LISTENERS=INTERNAL://host.containers.internal:29092,EXTERNAL://localhost:9092 \
+  -e KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT,CONTROLLER:PLAINTEXT \
   -e KAFKA_CONTROLLER_LISTENER_NAMES=CONTROLLER \
-  -e KAFKA_INTER_BROKER_LISTENER_NAME=PLAINTEXT \
+  -e KAFKA_INTER_BROKER_LISTENER_NAME=INTERNAL \
   -e KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1 \
   apache/kafka:4.1.2
 
 podman run -it --rm -p 8083:8083 \
   --name connect \
-  -e BOOTSTRAP_SERVERS=host.containers.internal:9092 \
+  -e BOOTSTRAP_SERVERS=host.containers.internal:29092 \
   -e CONFIG_STORAGE_TOPIC=my_connect_configs \
   -e OFFSET_STORAGE_TOPIC=my_connect_offsets \
   -e STATUS_STORAGE_TOPIC=my_connect_statuses \
   quay.io/debezium/connect:3.5
 
-
-podman build -t debezium-clickhouse-connect .
-podman run -it --rm -p 8083:8083 \
-  --name connect \
-  -e BOOTSTRAP_SERVERS=host.containers.internal:9092 \
-  -e CONFIG_STORAGE_TOPIC=my_connect_configs \
-  -e OFFSET_STORAGE_TOPIC=my_connect_offsets \
-  -e STATUS_STORAGE_TOPIC=my_connect_statuses \
-  debezium-clickhouse-connect
 ```
 
 ## ClickHouse
@@ -111,7 +103,12 @@ clickhousectl local server start
 clickhousectl local server list
 clickhousectl local client
 clickhousectl local server stop default
+```
 
-chctl local server start --name art-commission --config-file=~Notes/realtime-data-pipeline/clickhouse-config.xml
-chctl local client --name art-commission
+```sql
+SHOW DATABASES;
+USE art_commission;
+SELECT currentDatabase();
+SHOW TABLES;
+SELECT * FROM system.kafka_consumers;
 ```

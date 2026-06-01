@@ -4,54 +4,79 @@ CREATE DATABASE art_commission;
 GRANT ALL PRIVILEGES ON DATABASE art_commission TO my_username;
 
 CREATE TABLE artists (
-    artist_id SERIAL PRIMARY KEY,               -- Unique identifier for the artist
-    name VARCHAR(255) NOT NULL,                 -- Name of the artist
-    profile_url TEXT,                           -- URL to the artist's portfolio
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP -- Timestamp when the artist joined
+    artist_id SERIAL PRIMARY KEY,
+    name VARCHAR(255) NOT NULL,
+    profile_url TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE TABLE commissions (
-    commission_id SERIAL PRIMARY KEY,           -- Unique commission ID
-    artist_id INT REFERENCES artists(artist_id), -- Foreign key to the artist
-    customer_id INT,                            -- ID of the customer who made the commission
-    description TEXT,                           -- Description of the art commission request
-    total_amount DECIMAL(10, 2) NOT NULL,        -- Total price of the commission
-    commission_status VARCHAR(50),               -- Commission status (e.g., completed, in-progress)
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- Timestamp when the commission was created
-    completed_at TIMESTAMP,                     -- Timestamp when the commission is completed (if applicable)
-    due_date TIMESTAMP                          -- Due date for the commission (when it is expected to be completed)
+    commission_id SERIAL PRIMARY KEY,
+    artist_id INT,
+    customer_id INT,
+    description TEXT,
+    total_amount DECIMAL(10, 2) NOT NULL,
+    commission_status VARCHAR(50),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    completed_at TIMESTAMP,
+    due_date TIMESTAMP
 );
 
 CREATE TABLE payments (
-    payment_id SERIAL PRIMARY KEY,               -- Unique payment ID
-    commission_id INT REFERENCES commissions(commission_id), -- Foreign key to the commission
-    amount_paid DECIMAL(10, 2) NOT NULL,          -- Amount the customer paid
-    payment_method VARCHAR(100),                  -- Payment method (Credit Card, PayPal)
-    payment_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP, -- Timestamp of the payment
-    customer_id INT                               -- ID of the customer who made the payment
+    payment_id SERIAL PRIMARY KEY,
+    commission_id INT,
+    amount_paid DECIMAL(10, 2) NOT NULL,
+    payment_method VARCHAR(100),
+    payment_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    customer_id INT
 );
 
 CREATE TABLE fees (
-    fee_id SERIAL PRIMARY KEY,                   -- Unique fee ID
-    commission_id INT REFERENCES commissions(commission_id), -- Foreign key to the commission
-    fee_amount DECIMAL(10, 2) NOT NULL,           -- Amount of the fee charged for this commission
-    fee_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP  -- When the fee was calculated or applied
+    fee_id SERIAL PRIMARY KEY,
+    commission_id INT,
+    fee_amount DECIMAL(10, 2) NOT NULL,
+    fee_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
 CREATE PUBLICATION payment_pub FOR TABLE public.payments;
 
 -- Click House
+CREATE DATABASE art_commission;
+
 CREATE TABLE payments
 (
     payment_id UInt64,
     commission_id UInt64,
     amount_paid Decimal(10,2),
     payment_method String,
-    payment_date DateTime,
+    payment_date DateTime64(6),
     customer_id UInt64
 )
 ENGINE = MergeTree
 ORDER BY (payment_date, customer_id);
+
+CREATE TABLE payments_kafka
+(
+    payment_id UInt64,
+    commission_id UInt64,
+    amount_paid Decimal(10,2),
+    payment_method String,
+    payment_date DateTime64(6),
+    customer_id UInt64
+)
+ENGINE = Kafka
+SETTINGS
+    kafka_broker_list = 'localhost:9092',
+    kafka_topic_list = 'payment.public.payments',
+    kafka_group_name = 'clickhouse_payments',
+    kafka_format = 'JSONEachRow',
+    kafka_num_consumers = 1;
+
+CREATE MATERIALIZED VIEW payments_mv
+TO payments
+AS
+SELECT *
+FROM payments_kafka;
 
 CREATE TABLE artist_contributions (
     artist_id UInt64,                            -- Artist ID
