@@ -112,3 +112,15 @@ SELECT currentDatabase();
 SHOW TABLES;
 SELECT * FROM system.kafka_consumers;
 ```
+
+```bash
+python3 -m venv venv
+source venv/bin/activate
+which pip # check if pip pointed to venv 
+pip install psycopg2-binary
+pip install clickhouse-connect
+pip install pandas
+pip install tabulate
+python xprmt.py
+pip freeze > requirements.txt
+```

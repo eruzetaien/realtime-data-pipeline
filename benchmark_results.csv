@@ -1,0 +1,5 @@
+Query,PostgreSQL (ms),ClickHouse (ms),Speedup
+Revenue by Payment Method,245.13,36.76,6.67
+Monthly Revenue,1636.97,26.56,61.64
+Top 100 Customers,703.94,73.89,9.53
+Dashboard Query,1681.1,221.98,7.57
